@@ -1,5 +1,13 @@
 from . import db
 from werkzeug.security import generate_password_hash,check_password_hash
+from flask_login import UserMixin
+from . import login_manager
+
+
+#加载用户的回调函数
+@login_manager.user_loader
+def load_user(user_id):
+    return User.query.get(int(user_id))
 
 
 class Role(db.Model):
@@ -18,8 +26,8 @@ class User(UserMixin, db.Model):
     username = db.Column(db.String(64), unique=True, index=True)
     role_id = db.Column(db.Integer, db.ForeignKey('roles.id'))
     password_hash = db.Column(db.String(128))
-    factoryID = db.Column(db.String(128), db.ForeignKey('factory.id'))
     EqpID = db.Column(db.String(128))
+    factoryID = db.Column(db.String(128), db.ForeignKey('factory.id'))
     # 授权列，暂时不用
     confirmed = db.Column(db.Boolean, default=False)
 
@@ -37,3 +45,19 @@ class User(UserMixin, db.Model):
 
     def __repr__(slef):
         return '<User %r>' % slef.username
+
+
+#工厂表
+class Factory(db.Model):
+    __tablename__ = 'factory'
+    id = db.Column(db.String(20), primary_key=True)
+    address = db.Column(db.String(40))
+    responsor = db.Column(db.String(20))
+
+
+#设备表
+class Equipment(db.Model):
+    __tablename__ = 'equipment'
+    id = db.Column(db.String(20),primary_key=True)
+    place = db.Column(db.String(20), index=True)
+    supplier = db.Column(db.String(20)
