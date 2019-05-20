@@ -55,6 +55,7 @@ zeropoint|float|/
 -----|----|----
 id|int|主键
 Timestamp|datetime|索引（有默认值）
+FaultTime|datetime|/
 RecoverTime|datetime|/
 PeriodSecond|int|/
 FaultSencer|string|索引
